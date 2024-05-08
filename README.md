@@ -1,14 +1,11 @@
 # RBF-KAN
 This code implements a Radial Basis Function (RBF) based Kolmogorov-Arnold Network (KAN) for function approximation. The network consists of several layers, including RBF kernel activation layers and ReLU layers.
 
-
 ![image](https://github.com/sidhu2690/RBF-KAN/assets/136654152/1122c3dc-76fa-4a73-bbcf-a4dc124cac8d)
 
 ## Overview
+The current implementation serves as a basic foundation for the RBF-based KAN. However, there is ample room for optimization and enhancement. Here's a glimpse of potential future improvements:
 
-The code generates a synthetic dataset comprising a sinusoidal function with added noise. The dataset is then converted to PyTorch tensors and fed into the network for training. Training is performed using the Adam optimizer and mean squared error (MSE) loss.
-
-After training, the network's performance is evaluated by plotting both the ground truth function and the predicted function on the same graph.
 
 ## Potential Improvements and Considerations
 
