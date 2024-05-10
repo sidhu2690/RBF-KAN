@@ -2,6 +2,8 @@
 
 The `RBFKAN` class is a PyTorch module that implements a Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN). This module combines the traditional neural network approach with a radial basis function (RBF) kernel to capture non-linear relationships in the input data. It is designed to be used as a layer in a larger neural network architecture.
 
+## It's one of the fastest KAN and has a speed of 60its/s
+
 ## Class RBFLinear
 
 The `RBFLinear` class is a sub-module that implements the RBF kernel transformation of the input data. It takes the following arguments:
