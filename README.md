@@ -1,36 +1,54 @@
-# RBF-KAN
-This code implements a Radial Basis Function (RBF) based Kolmogorov-Arnold Network (KAN) for function approximation. The network consists of several layers, including RBF kernel activation layers and ReLU layers.
+# Guide for Using RBFKAN
 
-![image](https://github.com/sidhu2690/RBF-KAN/assets/136654152/1122c3dc-76fa-4a73-bbcf-a4dc124cac8d)
+The `RBFKAN` class is a PyTorch module that implements a Radial Basis Function Kolmogorov-Arnold Network (RBF-KAN). This module combines the traditional neural network approach with a radial basis function (RBF) kernel to capture non-linear relationships in the input data. It is designed to be used as a layer in a larger neural network architecture.
 
-## Overview
-The current implementation serves as a basic foundation for the RBF-based KAN. However, there is ample room for optimization and enhancement. Here's a glimpse of potential future improvements:
+## Class RBFLinear
 
+The `RBFLinear` class is a sub-module that implements the RBF kernel transformation of the input data. It takes the following arguments:
 
-## Potential Improvements and Considerations
+- `in_features`: The number of input features.
+- `out_features`: The number of output features.
+- `grid_min` (default=-2.0): The minimum value of the grid for the RBF kernel.
+- `grid_max` (default=2.0): The maximum value of the grid for the RBF kernel.
+- `num_grids` (default=8): The number of grid points for the RBF kernel.
+- `spline_weight_init_scale` (default=0.1): The scale factor for initializing the spline weights.
 
-- **Hyper-parameter tuning:** Tune parameters such as the number of centers and learning rate using techniques like grid search or Bayesian optimization.
-  
-- **Initialization strategies:** Explore advanced initialization techniques like k-means clustering or gradient-based initialization for RBF centers and weights.
+The `forward` method of this class applies the RBF kernel transformation to the input data.
 
-- **Regularization:** Employ techniques like L1/L2 regularization, dropout, or early stopping to prevent overfitting and improve generalization.
+## Class RBFKANLayer
 
-- **Architecture modifications:** Experiment with different layer configurations, types of layers (e.g., convolutional layers, attention mechanisms), and layer connections to better suit the problem domain.
+The `RBFKANLayer` class is the main building block of the `RBFKAN` module. It combines the `RBFLinear` transformation with a traditional linear layer. It takes the following arguments:
 
-- **Transfer learning:** Utilize pre-trained models or pre-trained RBF centers to expedite convergence and enhance performance.
+- `input_dim`: The number of input features.
+- `output_dim`: The number of output features.
+- `grid_min`, `grid_max`, `num_grids`, and `spline_weight_init_scale`: Same as in `RBFLinear`.
+- `use_base_update` (default=True): Whether to use the traditional linear layer in addition to the RBF kernel.
+- `base_activation` (default=nn.SiLU()): The activation function for the traditional linear layer.
 
-- **Ensemble methods:** Combine multiple models using ensemble techniques like bagging or boosting to improve predictive performance.
+The `forward` method of this class applies the RBF kernel transformation and, optionally, the traditional linear layer to the input data.
 
-- **Advanced optimization techniques:** Explore advanced optimization algorithms such as adaptive learning rate methods or second-order optimization methods to enhance convergence speed and final performance.
+## Class RBFKAN
 
-- **Interpretability and explainability:** Employ techniques like SHAP (SHapley Additive exPlanations) or LIME (Local Interpretable Model-agnostic Explanations) to interpret and explain the behavior of the RBF-based KAN.
+The `RBFKAN` class is the main module that combines multiple `RBFKANLayer` instances into a larger neural network architecture. It takes the following arguments:
 
-- **Domain-specific modifications:** Tailor the model architecture and modifications to specific application domains (e.g., time series forecasting, computer vision, natural language processing) to capture underlying patterns and relationships more effectively.
+- `layers_hidden`: A list of integers representing the number of features in each hidden layer, including the input and output layers.
+- `grid_min`, `grid_max`, `num_grids`, `use_base_update`, `base_activation`, and `spline_weight_init_scale`: Same as in `RBFKANLayer`.
 
-## Contributing
+The `forward` method of this class applies the sequence of `RBFKANLayer` instances to the input data, passing the output of one layer as the input to the next layer.
 
-Contributions are welcome! Feel free to open issues or submit pull requests to enhance the functionality, documentation, or examples provided in this repository.
+## Usage Example
 
-## License
+```python
+# Define the input and output dimensions
+input_dim = 10
+output_dim = 5
 
-This project is licensed under the [MIT License]([LICENSE](https://github.com/sidhu2690/RBF-KAN/blob/main/LICENSE.txt)).
+# Define the hidden layer dimensions
+hidden_dims = [16, 32, 16]
+
+# Create an RBFKAN instance
+model = RBFKAN([input_dim] + hidden_dims + [output_dim])
+
+# Forward pass with some input data
+x = torch.randn(batch_size, input_dim)
+y = model(x)
